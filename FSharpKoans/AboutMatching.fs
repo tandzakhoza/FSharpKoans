@@ -84,9 +84,9 @@ module ``04: Match expressions`` =
             | "wut" | "lol" -> "yolo"
             | "sunrise"
             | "sunset" -> "transition"
-            | FILL__ME_IN
-            | FILL__ME_IN
-            | FILL__ME_IN -> "failure"
+            | "vodka"
+            | "Johnny Walker"
+            | "Bell's" -> "failure"
             | _ -> "lolwut"
         f "lol" |> should equal "yolo"
         f "wut" |> should equal "yolo"

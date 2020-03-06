@@ -160,13 +160,13 @@ module ``02: About Binding`` =
         let z = 6.66 // replace with anything else!
         x |> should be ofType<int>
         y |> should be ofType<string>
-		z |> should be ofType<double>
+        z |> should be ofType<double>
 
     [<Test>]
     let ``09 A wildcard pattern will match anything`` () =
-        let _ = 20 // replace with an integer
-        let _ = "short" // replace with a string
-        let _ = 'c' // replace with anything else!
+        let 20 = 20 // replace with an integer
+        let "short" = "short" // replace with a string
+        let 'c' = 'c' // replace with anything else!
         ()
 
     [<Test>]
@@ -185,7 +185,7 @@ module ``02: About Binding`` =
 
     [<Test>]
     let ``12 Or patterns succeed if any pattern matches`` () =
-        let a | a = a
+        let a | a = ""
         let 7 | 13 | 2 = 3 + 10
         let 'x' | _ | 'p' = 'p'
         ()

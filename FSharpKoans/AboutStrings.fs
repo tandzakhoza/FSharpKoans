@@ -35,8 +35,9 @@ module ``11: String manipulation`` =
     let ``06 Getting a string from an integer or float`` () =
         let a = 23
         let b = 17.8
-        String.tostring a |> should equal "23"
-        String.tostring b |> should equal "17.8"
+
+        string a |> should equal "23"
+        string b |> should equal "17.8"
 
     (*
         The next few tests involve the `sprintf` function, which
@@ -72,7 +73,7 @@ module ``11: String manipulation`` =
     [<Test>]
     let ``11 String formatting: %f format specifier`` () =
         let result = sprintf "Multiply by %.6f, then triple" 2.26
-        let condensed = sprintf "Multiply by %f, then triple" 2.26
+        let condensed = sprintf "Multiply by %.2f, then triple" 2.26
         let rounded = sprintf "Multiply by %.1f, then triple" 2.26
         result |> should equal "Multiply by 2.260000, then triple"
         condensed |> should equal "Multiply by 2.26, then triple"
@@ -88,12 +89,12 @@ module ``11: String manipulation`` =
    // double-up a % to get a % in.
     [<Test>]
     let ``13 String formatting: Putting a '%' sign in`` () =
-        let result = sprintf "I scored %f%c on the test" 94.43 '%'
+        let result = sprintf "I scored %.2f%c on the test" 94.43 '%'
         result |> should equal "I scored 94.43% on the test"
 
     [<Test>]
     let ``14 String formatting: Multiple format specifiers`` () =
-        let result = sprintf "%d out of %d is %f, or (%s) %d percent." 3 5 0.6 "in other words" 60
+        let result = sprintf "%d out of %d is %.1f, or (%s) %d percent." 3 5 0.6 "in other words" 60
         result |> should equal "3 out of 5 is 0.6, or (in other words) 60 percent."
 
    // But that's not all! See the full set of formatting capabilities here:
@@ -106,8 +107,8 @@ module ``11: String manipulation`` =
         let s = "  Dr Phil, PhD, MD, MC, Medicine Man  "
         let ``first index of 'P'`` = s.IndexOf('P')
         let ``last index of 'P'`` = s.LastIndexOf('P')
-        let ``lowercase version`` = s.ToLower(s)
-        let ``without surrounding space`` = s.Trim(s)
+        let ``lowercase version`` = s.ToLower()
+        let ``without surrounding space`` = s.Trim (' ')
         ``first index of 'P'`` |> should equal 5
         ``last index of 'P'`` |> should equal 11
         ``lowercase version`` |> should equal "  dr phil, phd, md, mc, medicine man  "

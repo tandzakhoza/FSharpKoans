@@ -45,8 +45,8 @@ module ``03: Putting the Function into Functional Programming`` =
     [<Test>]
     let ``07 A function can span multiple lines (Part 1).`` () =
         (fun zorro ->
-            let k = "swash" // notice the indentation.
-            let b = "buckle" // F# is whitespace-sensitive, so it is important!
+            let k = "swash " // notice the indentation.
+            let b = "buckle " // F# is whitespace-sensitive, so it is important!
             zorro + " likes to " + k + b
         ) "Zorro the pirate" |> should equal "Zorro the pirate likes to swash buckle " 
 
@@ -66,7 +66,7 @@ module ``03: Putting the Function into Functional Programming`` =
                 let p = 3 in
                     who * p
         in
-            jorus 12 |> should equal 60
+            jorus 12 |> should equal 36
 
     // The next few are very similar.  Resist the temptation to
     // just fill out values without having any idea about what's
@@ -99,8 +99,8 @@ module ``03: Putting the Function into Functional Programming`` =
     [<Test>]
     let ``14 'Multiple-argument' functions are one-input, one-output in disguise`` () =
       let i j k = j * k
-      let j = __ 4
-      let k = __ 12
+      let j = i 4
+      let k = j 12
       k |> should equal 48
 
     [<Test>]
@@ -295,14 +295,14 @@ module ``03: Putting the Function into Functional Programming`` =
         // sendData is a function which is invoked ONLY for its side-effects
         // It might do something, and then it gives back a unit value.
         let sendData data = ()
-        sendData "some data to send..." |> should equal "some data to send..." // ... don't overthink this one!
+        sendData "some data to send..." |> should equal () // ... don't overthink this one!
    
     [<Test>]
     let ``29 Unit, as an input, conveys no data`` () = 
         let sayHello () = "hello"
         sayHello |> should be ofType<unit->string>
-        sayHello () |> should be ofType<FILL_ME_IN>
-        sayHello () |> should equal __
+        sayHello () |> should be ofType<string>
+        sayHello () |> should equal "hello"
 
     (*
     When we develop real systems, we often run into problems
@@ -333,12 +333,12 @@ module ``03: Putting the Function into Functional Programming`` =
         let divideBy10 n () =
             n / 10
         let deferred = divideBy10 700
-        divideBy10 |> should be ofType<FILL_ME_IN>
-        deferred |> should be ofType<FILL_ME_IN>
-        divideBy10 850 |> should be ofType<FILL_ME_IN>
-        deferred () |> should be ofType<FILL_ME_IN>
-        deferred () |> should equal __
-        divideBy10 6300 () |> should equal __
+        divideBy10 |> should be ofType<int->unit->int>
+        deferred |> should be ofType<unit->int>
+        divideBy10 850 |> should be ofType<unit->int>
+        deferred () |> should be ofType<int>
+        deferred () |> should equal 70
+        divideBy10 6300 () |> should equal 630
 
     (*
         Sometimes we want to do something purely for a side-effect
@@ -354,9 +354,9 @@ module ``03: Putting the Function into Functional Programming`` =
             // print out the value of x
             printfn "%A" x
             x // return x
-        log 5 |> should equal __
-        ignore (log "blorp") |> should equal __
-        log 19.66 |> ignore |> should equal __
+        log 5 |> should equal 5
+        ignore (log "blorp") |> should equal ()
+        log 19.66 |> ignore |> should equal ()
 
     [<Test>]
     let ``32 Partially specifying arguments (Part 1).`` () =
@@ -381,8 +381,9 @@ module ``03: Putting the Function into Functional Programming`` =
         // Extending a bit more, what do you do when you want to apply a function,
         // but modify the result before you give it back?
         let f animal noise = animal + " says " + noise
-        let cows = f "cow" // <-- multiple words on this line, or you may want to make this a multi-line thing.  You MUST use `f`.
-        cows "moo" |> should equal "cow says moo, de gozaru"
+        let cows =  
+            fun sound-> f ("cow") sound + ", de gozaru" // <-- multiple words on this line, or you may want to make this a multi-line thing.  You MUST use `f`.
+        cows "moo"|> should equal "cow says moo, de gozaru"
         cows "MOOooOO" |> should equal "cow says MOOooOO, de gozaru"
 
     [<Test>]
@@ -391,8 +392,8 @@ module ``03: Putting the Function into Functional Programming`` =
             let middle = (final - initial) / 2
             fun t -> t-middle, t+middle
         // note the number of inputs provided below.  Do you see why I can do this?
-        calculate 10 20 5 |> should equal 0, 10
-        calculate 0 600 250 |> should equal -50, 550
+        calculate 10 20 5 |> should equal (0, 10)
+        calculate 0 600 250 |> should equal (-50, 550)
 
     [<Test>]
     let ``36 Using a value defined in an inner scope`` () =
