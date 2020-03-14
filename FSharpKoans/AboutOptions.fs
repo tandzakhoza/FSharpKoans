@@ -58,7 +58,7 @@ module ``09: Exploring types, options, and results`` =
 
     [<Test>]
     let ``03 Basic Option example`` () =
-        getSurname "Taylor Swift" |> should equal "Swift"
+        getSurname "Taylor Swift" |> should equal (Some "Swift")
         getSurname "Eminem" |> should equal None
 
     // the System.Int32.TryParse, System.Double.TryParse, etc functions return
@@ -67,9 +67,8 @@ module ``09: Exploring types, options, and results`` =
     let ``04 Parsing a string safely`` () =
         let parse (s:string) =
             match System.Int32.TryParse s with
-            | true, s -> Some s 
-			| _, s -> None ''
-			// <-- fill in the match cases
+            | true, s -> Some s
+            | _, s -> None// <-- fill in the match cases
         parse "25" |> should equal (Some 25)
         parse "48" |> should equal (Some 48)
         parse "wut" |> should equal None
@@ -78,24 +77,39 @@ module ``09: Exploring types, options, and results`` =
     let ``05 Remapping Option values`` () =
       let f n =
          match getSurname n with
-         | _ -> __ // <-- write a bunch of good match cases
+         | Some a -> a
+         | None -> "[no surname]"// <-- write a bunch of good match cases
       f "Anubis" |> should equal "[no surname]"
       f "Niccolo Machiavelli" |> should equal "Machiavelli"
       f "Mara Jade" |> should equal "Jade"
       f "Khazad-Dum" |> should equal "[no surname]"
 
     type ErrorReason =
-    | DivisionByZero | NegativeNumberSupplied
+    | DivisionByZero 
+    | NegativeNumberSupplied
+
+    type output =
+    |Ok of float
+    |Error of ErrorReason
+
 
     [<Test>]
     let ``06 Using a Result to explain why things went wrong`` () =
         let f n m =
             match n<0.0, m=0.0 with
             | true, _ -> Error NegativeNumberSupplied
-            | _, true -> __
+            | _, true -> Error DivisionByZero
             | _ ->
-                // 'sqrt' is the square-root function
-                __ (sqrt n / m)
-        f -6.0 2.5 |> shouldEqual __
+                let sqrt n =
+                    let rec calc guess i=
+                        match i with 
+                        |10-> guess
+                        |_ -> let g = (guess+n/guess)/2.0
+                              calc g (i+1)
+                    match n<=0.0 with 
+                    |true -> failwith "error"
+                    |_-> calc (n/2.0) 0
+                Ok (sqrt n / m)
+        f -6.0 2.5 |> shouldEqual (Error NegativeNumberSupplied)
         f 144.0 2.0 |> shouldEqual (Ok 6.0)
         f 7.3 0.0 |> shouldEqual (Error DivisionByZero)

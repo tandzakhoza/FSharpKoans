@@ -73,8 +73,7 @@ module ``08: Parametric polymorphism`` =
         b |> should be ofType<char>
 
     [<Test>]
-    let ``02 id: the simplest built-in generic function`` () =C:\Users\g17k7\Desktop\functions\FSharpKoans\FSharpKoans\AboutLists.fs
-        // `id` is the identify function: it takes an input ... and gives it back immediately.
+    let ``02 id: the simplest built-in generic function`` () =   // `id` is the identify function: it takes an input ... and gives it back immediately.
         id 8 |> should equal 8
         id 7.6 |> should equal 7.6
         id "wut!" |> should equal "wut!"
@@ -97,12 +96,12 @@ module ``08: Parametric polymorphism`` =
         let b = Thrid (fun k -> true, k, 8)
         // how do you write a generic type?
         a |> should be ofType<GenericDiscriminatedUnionExample<float,int>>
-        b |> should be ofType<GenericDiscriminatedUnionExample<a'-> bool>>
+        b |> should be ofType<GenericDiscriminatedUnionExample<'a, bool>>
 
-    type MyDiscriminatedUnion<a'> =
-    | Furoth of a'
+    type MyDiscriminatedUnion<'a> =
+    | Furoth of 'a
     | Fevi
-    | Sxi of a'
+    | Sxi of 'a
 
     [<Test>]
     let ``05 Creating a generic discriminated union (Part 2).`` () =
